@@ -32,7 +32,6 @@
   }
   .app{width:100%;max-width:640px;}
 
-  /* ---------- ÉCRAN TITRE ---------- */
   .screen{display:none;animation:pop .35s ease;}
   .screen.active{display:block;}
   @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98);}to{opacity:1;transform:none;}}
@@ -71,7 +70,6 @@
   .btn-go:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(245,197,24,.5);}
   .btn-go:active{transform:scale(.98);}
 
-  /* ---------- ÉCRAN QUIZ ---------- */
   .hud{
     display:flex;justify-content:space-between;align-items:center;
     margin-bottom:14px;font-weight:700;font-size:.95rem;
@@ -168,7 +166,6 @@
   .btn-next.show{visibility:visible;animation:pop .25s ease;}
   .btn-next:hover{transform:translateY(-2px);}
 
-  /* ---------- ÉCRAN RÉSULTAT ---------- */
   .result-score{
     text-align:center;
     font-size:clamp(4rem,18vw,6.5rem);
@@ -209,7 +206,6 @@
 <body>
 <div class="app">
 
-  <!-- ÉCRAN TITRE -->
   <section class="screen active" id="screen-title">
     <h1 class="logo">
       <span class="bobby">Rap à Bobby</span>
@@ -220,7 +216,6 @@
     <button class="btn btn-go" id="btn-start">Lancer le quiz 🎤</button>
   </section>
 
-  <!-- ÉCRAN QUIZ -->
   <section class="screen" id="screen-quiz">
     <div class="hud">
       <span class="q-count" id="q-count">Question 1 / 5</span>
@@ -242,7 +237,6 @@
     <button class="btn btn-next" id="btn-next">Question suivante →</button>
   </section>
 
-  <!-- ÉCRAN RÉSULTAT -->
   <section class="screen" id="screen-result">
     <div class="result-score" id="final-score">0/5</div>
     <div class="rank">
@@ -255,7 +249,7 @@
 
 <script>
 const DUELS = [
-  { bobby: "Je baise ta daronne marliche",  iencli: "J’crache dans tes règles ça fait Ketchup Mayo",                          artiste: "Orelsan" },
+  { bobby: "J'crache par terre, fuck les bien-pensants",  iencli: "J’crache dans tes règles ça fait Ketchup Mayo",                          artiste: "Orelsan" },
   { bobby: "Comme tes pois, j'suis chiche",  iencli: "Ta meuf c’est comme du nutella, quand elle est nue t’es là",     artiste: "Volts Face" },
   { bobby: "Du rap tu comprends ni le phrasé, ni l'argot",  iencli: "Si ton iPhone explose à cause de la batterie, c’est la merde, mais ne confond pas siri et la Syrie",                 artiste: "La Fouine" },
   { bobby: "On se demande ce que tu fais là, Hidalgo",  iencli: "Une fille qui dit toujours oui, moi j’appelle ça une wifi",                 artiste: "La Fouine" },
@@ -283,17 +277,17 @@ const MESSAGES = [
   "Tu trouves que je rap bien ?",
   "T'abuses putain",
   "T'écoutes qui d'autre que Soso Maness et Lomepal en vrai ?",
-  "Pas mal du tout, t'es abonné.e.s à Booska-P toi",
+  "Pas mal du tout, t'es abonné.e à Booska-P toi",
   "T'as sûrement un glock chez toi"
 ];
 
 const QUESTIONS_PER_GAME = 5;
 
-let round = [];        // les duels de la partie
-let current = 0;       // index question en cours
+let round = [];        
+let current = 0;       
 let score = 0;
-let sessionSize = QUESTIONS_PER_GAME; // s'adapte au nombre de duels dispo
-let bobbyIsA = true;   // position de la vraie phrase pour la question en cours
+let sessionSize = QUESTIONS_PER_GAME; 
+let bobbyIsA = true;   
 let answered = false;
 
 const $ = id => document.getElementById(id);
@@ -372,7 +366,6 @@ function answer(picked) {
 
   if (isRight) score++;
 
-  // Révélation des badges
   const badgeIencli = $("badge-" + iencliKey);
   badgeIencli.textContent = duel.artiste ? "Rap de iencli · " + duel.artiste : "Rap de iencli";
   badgeIencli.classList.add("bobby"); 
