@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rap à Bobby ou Rap de Iencli</title>
+<style>
+  :root{
+    --noir:#0d0b10;
+    --asphalte:#17141d;
+    --carte:#1f1a28;
+    --or:#f5c518;
+    --violet:#8b5cf6;
+    --rouge:#ff3d5a;
+    --vert:#2dd4a7;
+    --blanc:#f4f0ff;
+    --gris:#9a92ad;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    background:var(--noir);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(139,92,246,.18), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 100%, rgba(245,197,24,.06), transparent);
+    color:var(--blanc);
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .app{width:100%;max-width:640px;}
+
+  /* ---------- ÉCRAN TITRE ---------- */
+  .screen{display:none;animation:pop .35s ease;}
+  .screen.active{display:block;}
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98);}to{opacity:1;transform:none;}}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+
+  .logo{
+    text-align:center;
+    font-size:clamp(2.2rem,8vw,3.6rem);
+    font-weight:900;
+    line-height:1.05;
+    letter-spacing:-.02em;
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .logo .bobby{color:var(--or);text-shadow:0 0 30px rgba(245,197,24,.35);}
+  .logo .ou{display:block;font-size:.4em;color:var(--gris);font-weight:600;letter-spacing:.4em;margin:6px 0;}
+  .logo .iencli{color:var(--rouge);text-shadow:0 0 30px rgba(255,61,90,.35);}
+  .tagline{text-align:center;color:var(--gris);margin-bottom:34px;font-size:1.05rem;}
+
+  .btn{
+    display:block;width:100%;
+    padding:18px 24px;
+    border:none;border-radius:16px;
+    font-size:1.15rem;font-weight:800;
+    cursor:pointer;
+    font-family:inherit;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:focus-visible{outline:3px solid var(--blanc);outline-offset:3px;}
+  .btn-go{
+    background:linear-gradient(135deg,var(--or),#ffde59);
+    color:#1a1400;
+    box-shadow:0 8px 30px rgba(245,197,24,.35);
+    text-transform:uppercase;letter-spacing:.08em;
+  }
+  .btn-go:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(245,197,24,.5);}
+  .btn-go:active{transform:scale(.98);}
+
+  /* ---------- ÉCRAN QUIZ ---------- */
+  .hud{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:14px;font-weight:700;font-size:.95rem;
+  }
+  .hud .q-count{color:var(--gris);text-transform:uppercase;letter-spacing:.15em;font-size:.8rem;}
+  .hud .score-pill{
+    background:var(--carte);border:1px solid rgba(255,255,255,.08);
+    padding:6px 14px;border-radius:99px;color:var(--or);
+  }
+  .progress{
+    height:6px;background:var(--carte);border-radius:99px;overflow:hidden;margin-bottom:26px;
+  }
+  .progress-bar{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,var(--violet),var(--or));
+    border-radius:99px;transition:width .4s ease;
+  }
+  .consigne{
+    text-align:center;color:var(--gris);
+    text-transform:uppercase;letter-spacing:.2em;font-size:.78rem;font-weight:700;
+    margin-bottom:18px;
+  }
+  .consigne strong{color:var(--or);}
+
+  .choices{display:flex;flex-direction:column;gap:14px;}
+  .vs{
+    text-align:center;font-weight:900;color:var(--violet);
+    font-size:1rem;letter-spacing:.3em;text-transform:uppercase;
+    margin:-2px 0;
+  }
+  .choice{
+    background:var(--carte);
+    border:2px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    padding:22px 20px;
+    font-size:1.12rem;
+    line-height:1.45;
+    color:var(--blanc);
+    cursor:pointer;
+    text-align:left;
+    font-family:inherit;
+    font-weight:600;
+    position:relative;
+    transition:transform .12s ease, border-color .15s ease, background .15s ease;
+    width:100%;
+  }
+  .choice::before{
+    content:"“";
+    position:absolute;top:6px;left:12px;
+    font-size:2rem;color:var(--violet);opacity:.5;font-weight:900;
+  }
+  .choice{padding-left:40px;}
+  .choice:hover:not(:disabled){transform:translateY(-2px);border-color:var(--violet);}
+  .choice:focus-visible{outline:3px solid var(--blanc);outline-offset:3px;}
+  .choice:disabled{cursor:default;}
+  .choice.correct{
+    border-color:var(--vert);background:rgba(45,212,167,.12);
+    box-shadow:0 0 24px rgba(45,212,167,.25);
+  }
+  .choice.wrong{
+    border-color:var(--rouge);background:rgba(255,61,90,.1);
+    animation:shake .35s ease;
+  }
+  .choice.faded{opacity:.45;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+  .badge{
+    position:absolute;top:-11px;right:14px;
+    font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;
+    padding:4px 12px;border-radius:99px;
+    opacity:0;transform:scale(.7);
+    transition:opacity .2s ease, transform .2s ease;
+  }
+  .choice.revealed .badge{opacity:1;transform:scale(1);}
+  .badge.bobby{background:var(--vert);color:#00281c;}
+  .badge.iencli{background:var(--rouge);color:#2b000a;}
+
+  .feedback{
+    text-align:center;min-height:34px;margin-top:20px;
+    font-weight:800;font-size:1.15rem;
+  }
+  .feedback.good{color:var(--vert);}
+  .feedback.bad{color:var(--rouge);}
+
+  .btn-next{
+    margin-top:14px;
+    background:var(--violet);color:#fff;
+    box-shadow:0 8px 24px rgba(139,92,246,.35);
+    visibility:hidden;
+  }
+  .btn-next.show{visibility:visible;animation:pop .25s ease;}
+  .btn-next:hover{transform:translateY(-2px);}
+
+  /* ---------- ÉCRAN RÉSULTAT ---------- */
+  .result-score{
+    text-align:center;
+    font-size:clamp(4rem,18vw,6.5rem);
+    font-weight:900;line-height:1;
+    background:linear-gradient(135deg,var(--or),var(--violet));
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin:10px 0 4px;
+  }
+  .result-sub{text-align:center;color:var(--gris);font-weight:700;margin-bottom:22px;}
+  .rank{
+    text-align:center;
+    background:var(--carte);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:26px 22px;
+    margin-bottom:26px;
+  }
+  .rank-emoji{font-size:3rem;display:block;margin-bottom:8px;}
+  .rank-title{
+    font-size:1.5rem;font-weight:900;text-transform:uppercase;
+    letter-spacing:.04em;margin-bottom:8px;
+  }
+  .rank-text{color:var(--gris);line-height:1.5;}
+  .btn-replay{
+    background:linear-gradient(135deg,var(--or),#ffde59);
+    color:#1a1400;
+    box-shadow:0 8px 30px rgba(245,197,24,.35);
+  }
+  .btn-replay:hover{transform:translateY(-2px);}
+
+  .footer-note{
+    text-align:center;color:var(--gris);opacity:.6;
+    font-size:.78rem;margin-top:26px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ÉCRAN TITRE -->
+  <section class="screen active" id="screen-title">
+    <h1 class="logo">
+      <span class="bobby">Rap à Bobby</span>
+      <span class="ou">— ou —</span>
+      <span class="iencli">Rap de Iencli</span>
+    </h1>
+    <p class="tagline">Une vraie punchline, une fausse. Démasque le iencli&nbsp;!</p>
+    <button class="btn btn-go" id="btn-start">Lancer le quiz 🎤</button>
+  </section>
+
+  <!-- ÉCRAN QUIZ -->
+  <section class="screen" id="screen-quiz">
+    <div class="hud">
+      <span class="q-count" id="q-count">Question 1 / 5</span>
+    </div>
+    <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+    <p class="consigne">Trouve le <strong>vrai rappeur</strong></p>
+    <div class="choices">
+      <button class="choice" id="choice-a">
+        <span class="badge" id="badge-a"></span>
+        <span id="text-a"></span>
+      </button>
+      <div class="vs">VS</div>
+      <button class="choice" id="choice-b">
+        <span class="badge" id="badge-b"></span>
+        <span id="text-b"></span>
+      </button>
+    </div>
+    <p class="feedback" id="feedback" aria-live="polite"></p>
+    <button class="btn btn-next" id="btn-next">Question suivante →</button>
+  </section>
+
+  <!-- ÉCRAN RÉSULTAT -->
+  <section class="screen" id="screen-result">
+    <div class="result-score" id="final-score">0/5</div>
+    <div class="rank">
+      <p class="rank-text" id="rank-text" style="font-size:1.2rem;font-weight:700;color:var(--blanc);"></p>
+    </div>
+    <button class="btn btn-replay" id="btn-replay">Rejouer 🔁</button>
+  </section>
+
+</div>
+
+<script>
+/* ============================================================
+   BANQUE DE DUELS — 50 paires
+     bobby  = la vraie phrase de rappeur  →  COLLE-LA entre les guillemets
+     iencli = la phrase inventée (déjà remplie pour 1-20)
+     artiste = nom du rappeur, affiché après la réponse
+   Astuce : cherche "COLLE ICI" pour trouver les emplacements vides.
+   Si ta phrase contient un guillemet double ("), mets un \ devant : \"
+   ============================================================ */
+const DUELS = [
+  { bobby: "Je baise ta daronne marliche",  iencli: "J’crache dans tes règles ça fait Ketchup Mayo",                          artiste: "Orelsan" },
+  { bobby: "Comme tes pois, j'suis chiche",  iencli: "Ta meuf c’est comme du nutella, quand elle est nue t’es là",     artiste: "Volts Face" },
+  { bobby: "Du rap tu comprends ni le phrasé, ni l'argot",  iencli: "Si ton iPhone explose à cause de la batterie, c’est la merde, mais ne confond pas siri et la Syrie",                 artiste: "La Fouine" },
+  { bobby: "On se demande ce que tu fais là, Hidalgo",  iencli: "Une fille qui dit toujours oui, moi j’appelle ça une wifi",                 artiste: "La Fouine" },
+  { bobby: "Mieux que ton rappeur préféré, j'suis le goat, un dieu incarné",  iencli: "Tu sers à rien comme un brocoli",                               artiste: "Niska" },
+  { bobby: "Dans le confessionnal j'ai pété, le curé a fait un AVC",  iencli: "J’pisse du champagne viens boire à la bouteille",                      artiste: "Seth Gueko" },
+  { bobby: "Toute ta clique, que des vilains, que des fils de pute",  iencli: "te déshabille pas j’vais te violer",                                 artiste: "JUL" },
+  { bobby: "T'es tellement faible, quand tu nous vois tu te pisses dessus",  iencli: "Dis pas à un zoophile que t’as un chat dans la gorge",                artiste: "Seth Gueko" },
+  { bobby: "J'suis pas un saint mais en h24 j'suis en train t'en tété / Rien que ça boit au goulot, s/o ta daronne en son bon lait",  iencli: "J’ai assez de vices pour faire du bricolage",                        artiste: "Rohff" },
+  { bobby: "Joint gechar, poche gechar, gun gechar / Ici on aime quand ça force, hein Gérard", iencli: "Si Aladdin il vend du rêve, Jean-Michel il vend des jarres",     artiste: "Black M" },
+  { bobby: "Tombe pas amoureux, en vrai j'suis hideux", iencli: "Comme asterix, j’suis tombé dans la potion",                         artiste: "JUL" },
+  { bobby: "T'es un chien, tu m'obéis, Animal Crossing", iencli: "Pour m'envoyer en l'air, dois-je baiser une hôtesse de l'air ?",                 artiste: "Booba" },
+  { bobby: "Quand tu parles je veux te casser la gueule", iencli: "Si je sors la AK je sais qu'ils feront tous caca",          artiste: "Lacrim" },
+  { bobby: "T'es ma salope p'tite gouine, t'es le Lucien d'mon Jim Queen", iencli: "Les gens y disent que j'suis trop vulgaire. Moi j'suis pas d'accord",   artiste: "Jack Uzi" },
+  { bobby: "J'suis trop pro je pense qu'aux stats, Excel titille ma prostate", iencli: "Dites à Donald qu’il s'Trump",                           artiste: "Black M" },
+  { bobby: "L'argent c'est comme les biatchs, ben t'en as pas", iencli: "Si c'est toi sur la couverture, j'lirai jamais ton livre",                       artiste: "Gérard Baste" },
+  { bobby: "Toc toc, qui est là ? Mon pied dans ta gueule", iencli: "Ce n’est pas parce que j’ai une montre que j’ai le temps",               artiste: "Alonzo" },
+  { bobby: "Comme Shrek, tu squattes les marais, en plus t'es moche", iencli: "Qui m’a fait la courte échelle, j’lui aurait pété dessus en grimpant",                    artiste: "Rohff" },
+  { bobby: "T'es à Villeneuve-Saint-Georges, j'touche du soutien-gorge", iencli: "XPTDR",                                                        artiste: "Leck" },
+  { bobby: "T'es hors de mon champ de vision", iencli: "On va manger des steaks hachés grands comme la Croatie",                    artiste: "Tony Parker" },
+  { bobby: "Je baise ta daronne marliche",                                                                       iencli: "J'fais du rap, mais j'viens pas d'la rue",          artiste: "Millésime K" },
+];
+
+/* ============================================================
+   MESSAGES DE FIN — un par score (0 à 5)
+   ============================================================ */
+const MESSAGES = [
+  "T'écoutes pas de rap en vrai hein",
+  "Tu trouves que je rap bien ?",
+  "T'abuses putain",
+  "T'écoutes qui d'autre que Soso Maness et Lomepal en vrai ?",
+  "Pas mal du tout, t'es abonné.e.s à Booska-P toi",
+  "T'as sûrement un glock chez toi"
+];
+
+const QUESTIONS_PER_GAME = 5;
+
+/* ============================================================
+   LOGIQUE DU JEU
+   ============================================================ */
+let round = [];        // les duels de la partie
+let current = 0;       // index question en cours
+let score = 0;
+let sessionSize = QUESTIONS_PER_GAME; // s'adapte au nombre de duels dispo
+let bobbyIsA = true;   // position de la vraie phrase pour la question en cours
+let answered = false;
+
+const $ = id => document.getElementById(id);
+const screens = {
+  title: $("screen-title"),
+  quiz: $("screen-quiz"),
+  result: $("screen-result")
+};
+
+function show(name) {
+  Object.values(screens).forEach(s => s.classList.remove("active"));
+  screens[name].classList.add("active");
+}
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Ne garde que les duels réellement remplis (ignore les placeholders)
+function playableDuels() {
+  return DUELS.filter(d =>
+    !d.bobby.includes("COLLE ICI") &&
+    !d.bobby.includes("à remplacer") &&
+    !d.iencli.includes("à remplacer")
+  );
+}
+
+function startGame() {
+  const pool = playableDuels();
+  sessionSize = Math.min(QUESTIONS_PER_GAME, pool.length);
+  round = shuffle(pool).slice(0, sessionSize);
+  current = 0;
+  score = 0;
+  show("quiz");
+  loadQuestion();
+}
+
+function loadQuestion() {
+  answered = false;
+  const duel = round[current];
+  bobbyIsA = Math.random() < 0.5;
+
+  $("q-count").textContent = "Question " + (current + 1) + " / " + sessionSize;
+  $("progress-bar").style.width = (current / sessionSize * 100) + "%";
+
+  $("text-a").textContent = bobbyIsA ? duel.bobby : duel.iencli;
+  $("text-b").textContent = bobbyIsA ? duel.iencli : duel.bobby;
+
+  ["a", "b"].forEach(k => {
+    const btn = $("choice-" + k);
+    btn.disabled = false;
+    btn.classList.remove("correct", "wrong", "revealed", "faded");
+    $("badge-" + k).textContent = "";
+    $("badge-" + k).className = "badge";
+  });
+
+  const fb = $("feedback");
+  fb.textContent = "";
+  fb.className = "feedback";
+  $("btn-next").classList.remove("show");
+  $("btn-next").textContent = current === sessionSize - 1 ? "Voir mon score →" : "Question suivante →";
+}
+
+function answer(picked) {
+  if (answered) return;
+  answered = true;
+
+  const duel = round[current];
+  const iencliKey = bobbyIsA ? "b" : "a";   // position de la phrase inventée
+  const bobbyKey  = bobbyIsA ? "a" : "b";   // position de la vraie phrase
+  const isRight = picked === iencliKey;     // le point se gagne en trouvant le iencli
+
+  if (isRight) score++;
+
+  // Révélation des badges
+  const badgeIencli = $("badge-" + iencliKey);
+  badgeIencli.textContent = duel.artiste ? "Rap de iencli · " + duel.artiste : "Rap de iencli";
+  badgeIencli.classList.add("bobby"); // style vert = la bonne réponse à trouver
+  const badgeBobby = $("badge-" + bobbyKey);
+  badgeBobby.textContent = "Rap à bobby";
+  badgeBobby.classList.add("iencli"); // style rouge = piège
+
+  $("choice-" + iencliKey).classList.add("correct", "revealed");
+  const bobbyBtn = $("choice-" + bobbyKey);
+  bobbyBtn.classList.add("revealed");
+  bobbyBtn.classList.add(isRight ? "faded" : "wrong");
+
+  $("choice-a").disabled = true;
+  $("choice-b").disabled = true;
+
+  const fb = $("feedback");
+  if (isRight) {
+    fb.textContent = shuffle(["🎯 Bien vu, c'était le faux !", "🔥 Iencli démasqué !", "💪 Rien ne t'échappe !", "✅ Le faux ne passe pas !"])[0];
+    fb.className = "feedback good";
+  } else {
+    fb.textContent = shuffle(["❌ Raté, ça c'est du vrai rap !", "😅 Le iencli t'a échappé !", "🚨 Tu viens d'accuser un vrai bobby !", "❌ Aïe, mauvais flair..."])[0];
+    fb.className = "feedback bad";
+  }
+
+  $("progress-bar").style.width = ((current + 1) / sessionSize * 100) + "%";
+  $("btn-next").classList.add("show");
+}
+
+function next() {
+  current++;
+  if (current < sessionSize) {
+    loadQuestion();
+  } else {
+    endGame();
+  }
+}
+
+function endGame() {
+  $("final-score").textContent = score + "/" + sessionSize;
+  $("rank-text").textContent = MESSAGES[Math.min(score, MESSAGES.length - 1)];
+  show("result");
+}
+
+$("btn-start").addEventListener("click", startGame);
+$("btn-replay").addEventListener("click", startGame);
+$("btn-next").addEventListener("click", next);
+$("choice-a").addEventListener("click", () => answer("a"));
+$("choice-b").addEventListener("click", () => answer("b"));
+</script>
+</body>
+</html>
