@@ -212,8 +212,8 @@
       <span class="ou">— ou —</span>
       <span class="iencli">Rap de Iencli</span>
     </h1>
-    <p class="tagline">Une vraie punchline, une fausse. Démasque le iencli (vrai rappeur)&nbsp;!</p>
-    <button class="btn btn-go" id="btn-start">Lancer le quiz 🎤</button>
+    <p class="tagline">Une vraie punchline écrite par un rappeur, une fausse écrite par bobby, trouve la vrai !&nbsp;!</p>
+    <button class="btn btn-go" id="btn-start">C'est ti-par</button>
   </section>
 
   <section class="screen" id="screen-quiz">
@@ -270,12 +270,42 @@ const DUELS = [
   { bobby: "T'es à Villeneuve-Saint-Georges, j'touche du soutien-gorge", iencli: "XPTDR",                                                        artiste: "Leck" },
   { bobby: "T'es hors de mon champ de vision", iencli: "On va manger des steaks hachés grands comme la Croatie",                    artiste: "Tony Parker" },
   { bobby: "Je baise ta daronne marliche",                                                                       iencli: "J'fais du rap, mais j'viens pas d'la rue",          artiste: "Millésime K" },
+  { bobby: "Tu raconte que d’la merde, prend du Canard WC",                                                                       iencli: "Met la en veilleuse, sinon, molard dans tes yeuzs",          artiste: "Zinée & Krono " },
+  { bobby: "Je m’appelle pas Dominique, mais j’suis un dom qui nique ",                                                                       iencli: "Je m’appelle Ambroise Louis 1er du nom",          artiste: "La fève " },
+  { bobby: "on vas te baiser comme Le Pen, Le pen-is",                                                                       iencli: "Dans la vie on s’en tape, comme Damien rieu",          artiste: "TKKF" },
+  { bobby: "Ma recette de gâteau, pas de farine, v’la de la coke",                                                                       iencli: "Grand mère sait faire une bonne cyprine",          artiste: "Gringe" },
+  { bobby: "Dans ta piscine y’a de l’eau, dans la mienne y’a de la mouille ",                                                                       iencli: " Des bon sons t’en as pas un, t’en as pas un de bon, t’es loin d’en avoir deux",          artiste: "Mairo & H jeune crack" },
+  { bobby: "J’suis trop stylé, je sens bon sans me parfumer",                                                                       iencli: "Cet air de passage qui pue, c’est pas moi",          artiste: "Nayrok" },
+  { bobby: "Si t’aime pas l’son, arrêter de danser",                                                                       iencli: "On est là pour s’amuser, impossible que la folie soit usée",          artiste: "Michou" },
+  { bobby: "Ma meuf me fait plus d’effet, j’veux ken ma clef USB",                                                                       iencli: " Ok ça sort de l’ordinaire, moi, cet ordi m’fou les nerfs",          artiste: "Svinkels" },
+  { bobby: "Ton slip : bien bien vide, mon slip : bien rempli ",                                                                       iencli: "Je fricote dans une pièce et je met mon zgueg dans un sexe",          artiste: "Biffty" },
+  { bobby: "Envoie moi un snap violet le jour de tes 18 ans",                                                                       iencli: "Tu viens d’avoir 15 ans… mmmhh intéressant",          artiste: "Doc Gynéco" },
+  { bobby: "Tellement communiste, j’veux rester dans le rouge",                                                                       iencli: "Laisse moi tiser mon Mojito p’tit Kirikou",          artiste: "Odezenne" },
+  { bobby: "Au dessus de nous y’as dieu, et en dessous Johnny Hallyday ",                                                                       iencli: "Dans One piece t’es Luffy’s de pute",          artiste: "Deadi" },
+  { bobby: "T'aime les mathématiques ? Ou t’aime bien maté ma trique ?",                                                                       iencli: "Rien que je l’accoste Tching Tchong, et je la soulève comme un gros Tchétchène",          artiste: "2TH" },
+  { bobby: "La teucha, la teucha, la teucha",                                                                       iencli: "La beuteu, la beuteu, la beuteu ",          artiste: "Lapsuceur" },
+  { bobby: "J’aime ni les ciseaux ni les rasoirs, donnez moi d’la crème dépilatoire",                                                                       iencli: "Elle gobe mon zizi, mais j’suis pas rasé ducoup elle zozote",          artiste: "H.E.M." },
+  { bobby: "Je suis un véritable rappeur, je suis un gangster, prenez garde à moi",                                                                       iencli: "Pa, pa, pa, pa, pa-pa",          artiste: "VALD" },
+  { bobby: "Rantanplan pan, rantan-rantan-Rantanplan",                                                                       iencli: "Bim badabim, Bim bada badaboum",          artiste: "Casseurs Flowteurs" },
+  { bobby: "Je pense, donc je suis ... le meilleur ",                                                                       iencli: "Je crains pas le magicien d’overd’Oz",          artiste: "Cadillac" },
+  { bobby: "Met du shit dans mon joint et tu me verras convulser",                                                                       iencli: "Délinquance, ordonnance, pas d’chance. Il manque une rime en ance, jeune trans",          artiste: "La fouine " },
+  { bobby: "J’ai jamais eu la polio mais j’adore la polia ",                                                                       iencli: "J’bois pas du jack Daniel mais mon voisin s’appelle Daniel",          artiste: "Sivry Gang " },
+  { bobby: "Tellement blindé, j’met mon disque de platine quand j’me gare",                                                                       iencli: "J’ai garé le gamos, donc le gamos est garé",          artiste: "Black M" },
+  { bobby: "T’es tellement gros que t’es sûrement obèse",                                                                       iencli: "'as pris l'melon, maintenant, t'es vendeur de melons",          artiste: "Orelsan" },
+  { bobby: "J'met ma bite entre deux miches, Hot dog !",                                                                       iencli: "J’suis dans une sacré salade, y m’faut 2 avocats",          artiste: "Maes" },
+  { bobby: "Je dors dans du satin, t’habite dans un sapin",                                                                       iencli: "Ça y est j’suis sur Deezer mais j’me lève quand même à 10h",          artiste: "Krilino" },
+  { bobby: "La traitance des animaux intelligent n’a pas lieux d’être",                                                                       iencli: "Les inconscient ne savent pas qu’ils sont inconscient car ils ne connaissent pas la conscience",          artiste: "Zya Zya" },
+  { bobby: "Comme un Pokémon t’es Pyroli et moi j'suis Excelangue",                                                                       iencli: "Doit-je baiser une femme italienne pour être ravi au lit ?",          artiste: "SDM" },
+  { bobby: "J’suis fan de juin, je parle pas du mois",                                                                       iencli: "Tu veux ma queue, tu fait la queue ",          artiste: "Leto" },
+  { bobby: "Je baise tellement que ma bite à son propre emploi du temps",                                                                       iencli: "J’vais me faire sucer par Didier Deschamps, comme ça j’suis sûr qu’il mettra pas les dents",          artiste: "David Okit" },
+  
+  
 ];
 
 const MESSAGES = [
-  "T'écoutes pas de rap en vrai hein",
+  "T'écoutes juste pas de rap",
   "Tu trouves que je rap bien ?",
-  "T'abuses putain",
+  "T'abuses là",
   "T'écoutes qui d'autre que Soso Maness et Lomepal en vrai ?",
   "Pas mal du tout, t'es abonné.e à Booska-P toi",
   "T'as sûrement un glock chez toi"
@@ -383,10 +413,10 @@ function answer(picked) {
 
   const fb = $("feedback");
   if (isRight) {
-    fb.textContent = shuffle(["Bien vu", "Iencli démasqué !", "Rien ne t'échappe !", "damn t'es sexy là"])[0];
+    fb.textContent = shuffle(["Bien vu", "Iencli démasqué", "Rien ne t'échappe !", "damn t'es sexy là", "t'es chaud t'es chaud", "tié un monstre"])[0];
     fb.className = "feedback good";
   } else {
-    fb.textContent = shuffle(["❌ Raté", "Le iencli t'a échappé !", "Tu viens d'accuser bobby !", "t'es.. t'es vraiment nul hein"])[0];
+    fb.textContent = shuffle(["❌ Raté", "Le iencli t'a échappé", "Tu viens d'accuser bobby..", "t'es.. t'es vraiment nul hein", "t'as quoi contre moi ?"])[0];
     fb.className = "feedback bad";
   }
 
